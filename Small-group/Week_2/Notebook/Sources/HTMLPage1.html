@@ -1,0 +1,221 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>简易记事本</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #noteInput {
+            margin-bottom: 20px;
+        }
+
+        .note {
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <h1>我的记事本</h1>
+    <div id="noteInput">
+        <textarea id="noteContent" placeholder="输入新笔记..."></textarea>
+        <button id="saveNote">保存笔记</button>
+    </div>
+    <input type="text" id="searchBox" placeholder="搜索笔记...">
+    <div id="noteList">
+        <!-- 笔记列表将通过JavaScript动态生成 -->
+    </div>
+
+    <script>
+    const noteList = document.getElementById('noteList');
+    const searchBox = document.getElementById('searchBox');
+
+    function saveNote(content) {
+      let notes = localStorage.getItem('notes');
+      notes = notes ? JSON.parse(notes) : [];
+      notes.unshift(content);
+      localStorage.setItem('notes', JSON.stringify(notes));
+      renderNotes();
+    }
+
+    function deleteNote(index) {
+      let notes = JSON.parse(localStorage.getItem('notes'));
+      notes.splice(index, 1);
+      localStorage.setItem('notes', JSON.stringify(notes));
+      renderNotes();
+    }
+
+    function updateNote(index, newContent) {
+      let notes = JSON.parse(localStorage.getItem('notes'));
+      notes[index] = newContent;
+      localStorage.setItem('notes', JSON.stringify(notes));
+      renderNotes();
+    }
+
+    function renderNotes(searchTerm = '') {
+      noteList.innerHTML = '';
+      let notes = JSON.parse(localStorage.getItem('notes')) || [];
+      notes.forEach((note, index) => {
+        let highlightedNote = note;
+        if (searchTerm) {
+          const regex = new RegExp(searchTerm, 'gi');
+          highlightedNote = note.replace(regex, `<span class="highlight">$&</span>`);
+        }
+        const noteElement = document.createElement('div');
+        noteElement.classList.add('note');
+        noteElement.innerHTML = `
+          <div>${highlightedNote}</div>
+          <button onclick="deleteNote(${index})">删除</button>
+          <button onclick="editNote(${index})">修改</button>
+        `;
+        noteList.appendChild(noteElement);
+      });
+    }
+
+    function editNote(index) {
+      const newContent = prompt('修改笔记:', JSON.parse(localStorage.getItem('notes'))[index]);
+      if (newContent !== null && newContent.trim() !== '') {
+        updateNote(index, newContent);
+      }
+    }
+
+    document.getElementById('saveNote').addEventListener('click', () => {
+      const noteContent = document.getElementById('noteContent').value;
+      if (noteContent.trim() !== '') {
+        saveNote(noteContent);
+        document.getElementById('noteContent').value = '';
+      }
+    });
+
+    searchBox.addEventListener('input', (event) => {
+      renderNotes(event.target.value);
+    });
+
+    renderNotes();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>简易记事本</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #noteInput {
+            margin-bottom: 20px;
+        }
+
+        .note {
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <h1>我的记事本</h1>
+    <div id="noteInput">
+        <textarea id="noteContent" placeholder="输入新笔记..."></textarea>
+        <button id="saveNote">保存笔记</button>
+    </div>
+    <input type="text" id="searchBox" placeholder="搜索笔记...">
+    <div id="noteList">
+        <!-- 笔记列表将通过JavaScript动态生成 -->
+    </div>
+
+    <script>
+    const noteList = document.getElementById('noteList');
+    const searchBox = document.getElementById('searchBox');
+
+    function saveNote(content) {
+      let notes = localStorage.getItem('notes');
+      notes = notes ? JSON.parse(notes) : [];
+      notes.unshift(content);
+      localStorage.setItem('notes', JSON.stringify(notes));
+      renderNotes();
+    }
+
+    function deleteNote(index) {
+      let notes = JSON.parse(localStorage.getItem('notes'));
+      notes.splice(index, 1);
+      localStorage.setItem('notes', JSON.stringify(notes));
+      renderNotes();
+    }
+
+    function updateNote(index, newContent) {
+      let notes = JSON.parse(localStorage.getItem('notes'));
+      notes[index] = newContent;
+      localStorage.setItem('notes', JSON.stringify(notes));
+      renderNotes();
+    }
+
+    function renderNotes(searchTerm = '') {
+      noteList.innerHTML = '';
+      let notes = JSON.parse(localStorage.getItem('notes')) || [];
+      notes.forEach((note, index) => {
+        let highlightedNote = note;
+        if (searchTerm) {
+          const regex = new RegExp(searchTerm, 'gi');
+          highlightedNote = note.replace(regex, `<span class="highlight">$&</span>`);
+        }
+        const noteElement = document.createElement('div');
+        noteElement.classList.add('note');
+        noteElement.innerHTML = `
+          <div>${highlightedNote}</div>
+          <button onclick="deleteNote(${index})">删除</button>
+          <button onclick="editNote(${index})">修改</button>
+        `;
+        noteList.appendChild(noteElement);
+      });
+    }
+
+    function editNote(index) {
+      const newContent = prompt('修改笔记:', JSON.parse(localStorage.getItem('notes'))[index]);
+      if (newContent !== null && newContent.trim() !== '') {
+        updateNote(index, newContent);
+      }
+    }
+
+    document.getElementById('saveNote').addEventListener('click', () => {
+      const noteContent = document.getElementById('noteContent').value;
+      if (noteContent.trim() !== '') {
+        saveNote(noteContent);
+        document.getElementById('noteContent').value = '';
+      }
+    });
+
+    searchBox.addEventListener('input', (event) => {
+      renderNotes(event.target.value);
+    });
+
+    renderNotes();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+</body>
+</html>
